@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wixdora Shop - صفحه اصلی</title>
+    <style>
+        :root {
+            --primary: #007bff;
+            --success: #28a745;
+            --danger: #dc3545;
+            --dark: #343a40;
+            --light: #f8f9fa;
+        }
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .navbar {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .badge {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-category {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .product-description {
+            color: #777;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            height: 60px;
+            overflow: hidden;
+        }
+        
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            z-index: 9999;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .cart-sidebar {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 999;
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">🛍️ Wixdora Shop</a>
+            <ul class="nav-links">
+                <li><a href="index.html">خانه</a></li>
+                <li><a href="products.html">محصولات</a></li>
+                <li>
+                    <a href="#" onclick="toggleCart()">
+                        سبد خرید 
+                        <span id="cart-count" class="badge">0</span>
+                    </a>
+                </li>
+                <li><a href="login.html">ورود</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- سبد خرید شناور -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>سبد خرید شما</h3>
+            <button onclick="toggleCart()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- آیتم‌های سبد خرید اینجا نمایش داده می‌شوند -->
+        </div>
+    </div>
+
+    <div class="alert" id="alert"></div>
+
+    <div class="container">
+        <section class="hero">
+            <h1>به Wixdora خوش آمدید</h1>
+            <p>بهترین محصولات با بهترین قیمت‌ها</p>
+            <a href="products.html" class="btn btn-success">مشاهده همه محصولات</a>
+        </section>
+
+        <h2 style="text-align: center; margin: 2rem 0; color: var(--dark);">محصولات ویژه</h2>
+        <div class="products-grid" id="products-container">
+            <!-- محصولات اینجا نمایش داده می‌شوند -->
+        </div>
+    </div>
+
+    <script>
+        // سبد خرید جهانی - بدون نیاز به localStorage
+        let shoppingCart = [];
+        
+        const products = [
+            { 
+                id: 1, 
+                name: "لپ‌تاپ گیمینگ ایسوس", 
+                price: 45000000, 
+                icon: "💻", 
+                category: "الکترونیک", 
+                description: "لپ‌تاپ گیمینگ با پردازنده Core i7" 
+            },
+            { 
+                id: 2, 
+                name: "هدفون بی‌سیم سونی", 
+                price: 850000, 
+                icon: "🎧", 
+                category: "الکترونیک", 
+                description: "هدفون بی‌سیم با نویزکنسلینگ" 
+            },
+            { 
+                id: 3, 
+                name: "گوشی هوآوی P50", 
+                price: 12000000, 
+                icon: "📱", 
+                category: "الکترونیک", 
+                description: "گوشی هوشمند با دوربین 50 مگاپیکسل" 
+            },
+            { 
+                id: 4, 
+                name: "کفش ورزشی نایک", 
+                price: 650000, 
+                icon: "👟", 
+                category: "پوشاک", 
+                description: "کفش ورزشی با کفی ارتوپدی" 
+            }
+        ];
+
+        window.addEventListener('load', function() {
+            displayProducts();
+            updateCartCount();
+        });
+
+        function displayProducts() {
+            const container = document.getElementById('products-container');
+            
+            let html = '';
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
+                html += `
+                    <div class="product-card">
+                        <div class="product-icon">${product.icon}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">${product.price.toLocaleString()} تومان</div>
+                        <button class="btn" onclick="addToCart(${product.id})">
+                            افزودن به سبد خرید
+                        </button>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function addToCart(productId) {
+            const product = findProductById(productId);
+            
+            if (!product) {
+                showAlert('محصول یافت نشد!');
+                return;
+            }
+            
+            // بررسی آیا محصول در سبد هست
+            let existingItem = null;
+            for (let i = 0; i < shoppingCart.length; i++) {
+                if (shoppingCart[i].id === productId) {
+                    existingItem = shoppingCart[i];
+                    break;
+                }
+            }
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                shoppingCart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    icon: product.icon,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            updateCartDisplay();
+            showAlert('✅ ' + product.name + ' به سبد خرید اضافه شد!');
+        }
+
+        function findProductById(productId) {
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].id === productId) {
+                    return products[i];
+                }
+            }
+            return null;
+        }
+
+        function updateCartCount() {
+            let totalItems = 0;
+            for (let i = 0; i < shoppingCart.length; i++) {
+                totalItems += shoppingCart[i].quantity;
+            }
+            
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            if (cartSidebar.style.display === 'block') {
+                cartSidebar.style.display = 'none';
+            } else {
+                cartSidebar.style.display = 'block';
+                updateCartDisplay();
+            }
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            
+            if (shoppingCart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart">سبد خرید شما خالی است</div>';
+                return;
+            }
+            
+            let html = '';
+            let totalPrice = 0;
+            
+            for (let i = 0; i < shoppingCart.length; i++) {
+                const item = shoppingCart[i];
+                const itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+                
+                html += `
+                    <div class="cart-item">
+                        <div>
+                            <div style="font-weight: bold;">${item.name}</div>
+                            <div style="font-size: 0.8rem; color: #666;">
+                                ${item.quantity} × ${item.price.toLocaleString()} تومان
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; color: var(--primary);">
+                                ${itemTotal.toLocaleString()} تومان
+                            </div>
+                            <button onclick="removeFromCart(${item.id})" style="background: var(--danger); color: white; border: none; padding: 0.2rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.7rem; margin-top: 0.2rem;">
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // اضافه کردن جمع کل
+            html += `
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem;">
+                        <span>جمع کل:</span>
+                        <span>${totalPrice.toLocaleString()} تومان</span>
+                    </div>
+                    <button class="btn btn-success" style="width: 100%; margin-top: 1rem;" onclick="checkout()">
+                        تسویه حساب
+                    </button>
+                </div>
+            `;
+            
+            cartItems.innerHTML = html;
+        }
+
+        function removeFromCart(productId) {
+            for (let i = 0; i < shoppingCart.length; i++) {
+                if (shoppingCart[i].id === productId) {
+                    shoppingCart.splice(i, 1);
+                    break;
+                }
+            }
+            
+            updateCartCount();
+            updateCartDisplay();
+            showAlert('محصول از سبد خرید حذف شد');
+        }
+
+        function checkout() {
+            if (shoppingCart.length === 0) {
+                showAlert('سبد خرید شما خالی است!');
+                return;
+            }
+            
+            let total = 0;
+            for (let i = 0; i < shoppingCart.length; i++) {
+                total += shoppingCart[i].price * shoppingCart[i].quantity;
+            }
+            
+            if (confirm(`آیا از پرداخت ${total.toLocaleString()} تومان اطمینان دارید؟`)) {
+                shoppingCart = [];
+                updateCartCount();
+                updateCartDisplay();
+                toggleCart();
+                showAlert('✅ پرداخت با موفقیت انجام شد! سفارش شما ثبت شده است.');
+            }
+        }
+
+        function showAlert(message) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        // بستن سبد خرید با کلیک خارج
+        document.addEventListener('click', function(event) {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartButton = document.querySelector('.nav-links a[onclick="toggleCart()"]');
+            
+            if (cartSidebar.style.display === 'block' && 
+                !cartSidebar.contains(event.target) && 
+                event.target !== cartButton && 
+                !cartButton.contains(event.target)) {
+                cartSidebar.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wixdora Shop - ورود</title>
+    <style>
+        /* استایل‌های مشابه صفحه اصلی */
+        :root {
+            --primary: #007bff;
+            --success: #28a745;
+            --danger: #dc3545;
+            --dark: #343a40;
+            --light: #f8f9fa;
+        }
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .badge {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+        }
+        
+        /* استایل‌های فرم */
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 60px;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+            text-decoration: none;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .user-welcome {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            z-index: 9999;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">🛍️ Wixdora Shop</a>
+            <ul class="nav-links">
+                <li><a href="index.html">خانه</a></li>
+                <li><a href="products.html">محصولات</a></li>
+                <li><a href="cart.html">سبد خرید <span id="cart-count" class="badge">0</span></a></li>
+                <li><a href="login.html">ورود</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="alert" id="alert"></div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- نمایش خوشامدگویی اگر کاربر وارد شده -->
+            <div class="user-welcome" id="user-welcome">
+                <div class="welcome-icon">👋</div>
+                <h2 id="welcome-message">خوش آمدید!</h2>
+                <p>شما با موفقیت وارد حساب کاربری خود شده‌اید.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="index.html" class="btn">بازگشت به صفحه اصلی</a>
+                    <button class="btn btn-danger" onclick="logout()" style="margin-top: 1rem;">
+                        خروج از حساب
+                    </button>
+                </div>
+            </div>
+
+            <!-- فرم‌های ورود/ثبت نام -->
+            <div id="auth-forms">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="showTab('login')">ورود</button>
+                    <button class="auth-tab" onclick="showTab('register')">ثبت نام</button>
+                </div>
+
+                <!-- فرم ورود -->
+                <form class="auth-form active" id="login-form">
+                    <div class="form-group">
+                        <label class="form-label">ایمیل</label>
+                        <input type="email" class="form-input" id="login-email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">رمز عبور</label>
+                        <input type="password" class="form-input" id="login-password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="remember-me">
+                            مرا به خاطر بسپار
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn">ورود به حساب</button>
+                </form>
+
+                <!-- فرم ثبت نام -->
+                <form class="auth-form" id="register-form">
+                    <div class="form-group">
+                        <label class="form-label">نام کامل</label>
+                        <input type="text" class="form-input" id="register-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">ایمیل</label>
+                        <input type="email" class="form-input" id="register-email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">رمز عبور</label>
+                        <input type="password" class="form-input" id="register-password" required minlength="6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">تکرار رمز عبور</label>
+                        <input type="password" class="form-input" id="register-confirm-password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">ثبت نام</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // وقتی صفحه لود شد
+        window.addEventListener('load', function() {
+            updateCartCount();
+            checkUserLogin();
+            setupFormListeners();
+        });
+
+        // بررسی آیا کاربر وارد شده
+        function checkUserLogin() {
+            const user = getCurrentUser();
+            const authForms = document.getElementById('auth-forms');
+            const userWelcome = document.getElementById('user-welcome');
+            
+            if (user) {
+                authForms.style.display = 'none';
+                userWelcome.style.display = 'block';
+                document.getElementById('welcome-message').textContent = `خوش آمدید، ${user.name}!`;
+            } else {
+                authForms.style.display = 'block';
+                userWelcome.style.display = 'none';
+            }
+        }
+
+        // نمایش تب‌ها
+        function showTab(tabName) {
+            // آپدیت دکمه‌های تب
+            document.querySelectorAll('.auth-tab').forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // نمایش فرم مربوطه
+            document.querySelectorAll('.auth-form').forEach(function(form) {
+                form.classList.remove('active');
+            });
+            document.getElementById(tabName + '-form').classList.add('active');
+        }
+
+        // تنظیم listenerهای فرم
+        function setupFormListeners() {
+            // فرم ورود
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                loginUser();
+            });
+
+            // فرم ثبت نام
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                registerUser();
+            });
+        }
+
+        // ورود کاربر
+        function loginUser() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+
+            // اعتبارسنجی اولیه
+            if (!email || !password) {
+                showAlert('لطفاً تمام فیلدها را پر کنید');
+                return;
+            }
+
+            // شبیه‌سازی تأخیر
+            const btn = document.querySelector('#login-form .btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'در حال ورود...';
+            btn.disabled = true;
+
+            setTimeout(function() {
+                // بررسی کاربر
+                const users = getUsers();
+                const user = findUserByEmailAndPassword(users, email, password);
+                
+                if (user) {
+                    const userInfo = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email
+                    };
+
+                    // ذخیره کاربر
+                    setCurrentUser(userInfo, rememberMe);
+                    showAlert('✅ ورود موفقیت‌آمیز!');
+                    checkUserLogin();
+                    
+                } else {
+                    showAlert('ایمیل یا رمز عبور نادرست است');
+                }
+
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        // ثبت نام کاربر
+        function registerUser() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            // اعتبارسنجی
+            if (!name || !email || !password || !confirmPassword) {
+                showAlert('لطفاً تمام فیلدها را پر کنید');
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert('رمز عبور باید حداقل ۶ کاراکتر باشد');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('رمز عبورها مطابقت ندارند');
+                return;
+            }
+
+            // شبیه‌سازی تأخیر
+            const btn = document.querySelector('#register-form .btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'در حال ثبت نام...';
+            btn.disabled = true;
+
+            setTimeout(function() {
+                // ایجاد کاربر جدید
+                const users = getUsers();
+                
+                // بررسی وجود ایمیل
+                if (findUserByEmail(users, email)) {
+                    showAlert('این ایمیل قبلاً ثبت شده است');
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+
+                const newUser = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    password: password,
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                saveUsers(users);
+
+                // ورود خودکار بعد از ثبت نام
+                const userInfo = {
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email
+                };
+
+                setCurrentUser(userInfo, true);
+                showAlert('✅ ثبت نام موفقیت‌آمیز!');
+                checkUserLogin();
+
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        // خروج از حساب
+        function logout() {
+            clearCurrentUser();
+            showAlert('با موفقیت از حساب خارج شدید');
+            setTimeout(function() {
+                checkUserLogin();
+            }, 1000);
+        }
+
+        // توابع کمکی برای مدیریت کاربران
+        function getUsers() {
+            try {
+                const usersData = localStorage.getItem('wixdora_users');
+                if (usersData) {
+                    return JSON.parse(usersData);
+                }
+            } catch (e) {
+                console.log('خطا در خواندن کاربران');
+            }
+            return [];
+        }
+
+        function saveUsers(users) {
+            try {
+                localStorage.setItem('wixdora_users', JSON.stringify(users));
+            } catch (e) {
+                console.log('خطا در ذخیره کاربران');
+            }
+        }
+
+        function findUserByEmail(users, email) {
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].email === email) {
+                    return users[i];
+                }
+            }
+            return null;
+        }
+
+        function findUserByEmailAndPassword(users, email, password) {
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].email === email && users[i].password === password) {
+                    return users[i];
+                }
+            }
+            return null;
+        }
+
+        function getCurrentUser() {
+            try {
+                const userData = localStorage.getItem('wixdora_current_user') || 
+                               sessionStorage.getItem('wixdora_current_user');
+                if (userData) {
+                    return JSON.parse(userData);
+                }
+            } catch (e) {
+                console.log('خطا در خواندن کاربر فعلی');
+            }
+            return null;
+        }
+
+        function setCurrentUser(user, remember) {
+            try {
+                if (remember) {
+                    localStorage.setItem('wixdora_current_user', JSON.stringify(user));
+                } else {
+                    sessionStorage.setItem('wixdora_current_user', JSON.stringify(user));
+                }
+            } catch (e) {
+                console.log('خطا در ذخیره کاربر');
+            }
+        }
+
+        function clearCurrentUser() {
+            try {
+                localStorage.removeItem('wixdora_current_user');
+                sessionStorage.removeItem('wixdora_current_user');
+            } catch (e) {
+                console.log('خطا در حذف کاربر');
+            }
+        }
+
+        // آپدیت تعداد سبد خرید
+        function updateCartCount() {
+            const cart = getCartFromStorage();
+            let totalItems = 0;
+            for (let i = 0; i < cart.length; i++) {
+                totalItems += cart[i].quantity;
+            }
+            
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        function getCartFromStorage() {
+            try {
+                const cartData = localStorage.getItem('wixdora_cart');
+                if (cartData) {
+                    return JSON.parse(cartData);
+                }
+            } catch (e) {
+                console.log('خطا در خواندن سبد خرید');
+            }
+            return [];
+        }
+
+        // نمایش هشدار
+        function showAlert(message) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

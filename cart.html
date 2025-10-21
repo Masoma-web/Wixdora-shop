@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wixdora Shop - سبد خرید</title>
+    <style>
+        /* استایل‌های مشابه صفحه اصلی */
+        :root {
+            --primary: #007bff;
+            --success: #28a745;
+            --danger: #dc3545;
+            --dark: #343a40;
+            --light: #f8f9fa;
+        }
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .navbar {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .badge {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            z-index: 9999;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        /* استایل‌های سبد خرید */
+        .cart-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .cart-item-icon {
+            font-size: 2.5rem;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        .quantity-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity {
+            font-weight: bold;
+            margin: 0 0.5rem;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .remove-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .summary {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">🛍️ Wixdora Shop</a>
+            <ul class="nav-links">
+                <li><a href="index.html">خانه</a></li>
+                <li><a href="products.html">محصولات</a></li>
+                <li><a href="cart.html">سبد خرید <span id="cart-count" class="badge">0</span></a></li>
+                <li><a href="login.html">ورود</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="alert" id="alert"></div>
+
+    <div class="container">
+        <h1 style="text-align: center; margin: 2rem 0;">سبد خرید شما</h1>
+        
+        <div id="cart-content">
+            <!-- محتوای سبد خرید اینجا نمایش داده می‌شود -->
+        </div>
+        
+        <div class="summary" id="order-summary" style="display: none;">
+            <h3>خلاصه سفارش</h3>
+            <div class="summary-row">
+                <span>جمع کل:</span>
+                <span id="subtotal">0 تومان</span>
+            </div>
+            <div class="summary-row">
+                <span>تخفیف:</span>
+                <span id="discount">0 تومان</span>
+            </div>
+            <div class="summary-row total">
+                <span>مبلغ قابل پرداخت:</span>
+                <span id="total">0 تومان</span>
+            </div>
+            <button class="btn btn-success" onclick="checkout()" style="width: 100%; margin-top: 1rem;">
+                تسویه حساب و پرداخت
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // وقتی صفحه لود شد
+        window.addEventListener('load', function() {
+            loadCart();
+            updateCartCount();
+        });
+
+        // بارگذاری سبد خرید
+        function loadCart() {
+            const cart = getCartFromStorage();
+            const cartContent = document.getElementById('cart-content');
+            const orderSummary = document.getElementById('order-summary');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-icon">🛒</div>
+                        <h2>سبد خرید شما خالی است</h2>
+                        <p>می‌توانید از صفحه محصولات، کالاهای مورد نظر خود را اضافه کنید</p>
+                        <a href="products.html" class="btn" style="display: inline-block; width: auto; margin-top: 1rem;">
+                            مشاهده محصولات
+                        </a>
+                    </div>
+                `;
+                orderSummary.style.display = 'none';
+                return;
+            }
+            
+            // نمایش آیتم‌های سبد خرید
+            let html = '';
+            for (let i = 0; i < cart.length; i++) {
+                const item = cart[i];
+                const itemTotal = item.price * item.quantity;
+                
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-icon">${item.icon}</div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div class="cart-item-price">${item.price.toLocaleString()} تومان</div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; margin-bottom: 0.5rem; color: var(--primary);">
+                                ${itemTotal.toLocaleString()} تومان
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${item.id})">
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            cartContent.innerHTML = html;
+            orderSummary.style.display = 'block';
+            updateOrderSummary();
+        }
+
+        // افزایش تعداد
+        function increaseQuantity(productId) {
+            let cart = getCartFromStorage();
+            const item = findCartItemById(cart, productId);
+            
+            if (item) {
+                item.quantity += 1;
+                saveCartToStorage(cart);
+                loadCart();
+                updateCartCount();
+            }
+        }
+
+        // کاهش تعداد
+        function decreaseQuantity(productId) {
+            let cart = getCartFromStorage();
+            const item = findCartItemById(cart, productId);
+            
+            if (item) {
+                item.quantity -= 1;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(item => item.id !== productId);
+                }
+                saveCartToStorage(cart);
+                loadCart();
+                updateCartCount();
+            }
+        }
+
+        // حذف از سبد خرید
+        function removeFromCart(productId) {
+            let cart = getCartFromStorage();
+            cart = cart.filter(item => item.id !== productId);
+            saveCartToStorage(cart);
+            loadCart();
+            updateCartCount();
+            showAlert('محصول از سبد خرید حذف شد');
+        }
+
+        // پیدا کردن آیتم در سبد خرید
+        function findCartItemById(cart, productId) {
+            for (let i = 0; i < cart.length; i++) {
+                if (cart[i].id === productId) {
+                    return cart[i];
+                }
+            }
+            return null;
+        }
+
+        // آپدیت خلاصه سفارش
+        function updateOrderSummary() {
+            const cart = getCartFromStorage();
+            let subtotal = 0;
+            for (let i = 0; i < cart.length; i++) {
+                subtotal += cart[i].price * cart[i].quantity;
+            }
+            const discount = 0;
+            const total = subtotal - discount;
+            
+            document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' تومان';
+            document.getElementById('discount').textContent = discount.toLocaleString() + ' تومان';
+            document.getElementById('total').textContent = total.toLocaleString() + ' تومان';
+        }
+
+        // تسویه حساب
+        function checkout() {
+            const cart = getCartFromStorage();
+            
+            if (cart.length === 0) {
+                showAlert('سبد خرید شما خالی است!');
+                return;
+            }
+            
+            let total = 0;
+            for (let i = 0; i < cart.length; i++) {
+                total += cart[i].price * cart[i].quantity;
+            }
+            
+            if (confirm(`آیا از پرداخت ${total.toLocaleString()} تومان اطمینان دارید؟`)) {
+                // خالی کردن سبد خرید
+                saveCartToStorage([]);
+                loadCart();
+                updateCartCount();
+                showAlert('✅ پرداخت با موفقیت انجام شد! سفارش شما ثبت شده است.');
+            }
+        }
+
+        // دریافت سبد خرید از localStorage
+        function getCartFromStorage() {
+            try {
+                const cartData = localStorage.getItem('wixdora_cart');
+                if (cartData) {
+                    return JSON.parse(cartData);
+                }
+            } catch (e) {
+                console.log('خطا در خواندن سبد خرید');
+            }
+            return [];
+        }
+
+        // ذخیره سبد خرید در localStorage
+        function saveCartToStorage(cart) {
+            try {
+                localStorage.setItem('wixdora_cart', JSON.stringify(cart));
+            } catch (e) {
+                console.log('خطا در ذخیره سبد خرید');
+            }
+        }
+
+        // آپدیت تعداد سبد خرید
+        function updateCartCount() {
+            const cart = getCartFromStorage();
+            let totalItems = 0;
+            for (let i = 0; i < cart.length; i++) {
+                totalItems += cart[i].quantity;
+            }
+            
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        // نمایش هشدار
+        function showAlert(message) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
