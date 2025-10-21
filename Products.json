@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "name": "کفش نایک",
+      "description": "کفش راحتی و اسپرت",
+      "price": 2500,
+      "image": "images/shoe1.jpg"
+    },
+    {
+      "id": 2,
+      "name": "تی‌شرت آبی",
+      "description": "تی‌شرت با کیفیت",
+      "price": 800,
+      "image": "images/tshirt1.jpg"
+    },
+    {
+      "id": 3,
+      "name": "شلوار جین",
+      "description": "شلوار جین راحت و مقاوم",
+      "price": 1500,
+      "image": "images/jeans1.jpg"
+    }
+  ]
+  
