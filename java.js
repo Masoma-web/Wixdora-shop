@@ -198,3 +198,10 @@ function displayProducts(products, container) {
         });
     });
 }
+// جمع کل قیمت
+function updateCartTotal() {
+    const cart = getCartFromStorage();
+    let totalPrice = 0;
+    cart.forEach(item => totalPrice += item.price * item.quantity);
+    console.log('جمع کل:', totalPrice.toLocaleString(), 'تومان'); // برای تست
+}
