@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>داشبورد کاربر - ویکسدورا</title>
+<style>
+  body { font-family:Tahoma, sans-serif; background:#f9f9ff; margin:0; padding:0;}
+  header { background:#6c63ff; color:white; padding:1rem; text-align:center; }
+  header button { background:#28a745; color:white; border:none; padding:0.5rem 1rem; border-radius:5px; cursor:pointer; float:left; margin-left:1rem;}
+  main { max-width:1000px; margin:2rem auto; padding:0 1rem; }
+  h2 { color:#6c63ff; margin-bottom:1rem; }
+  .cart-item { background:white; padding:1rem; margin-bottom:1rem; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center;}
+</style>
+</head>
+<body>
+
+<header>
+  داشبورد کاربر
+  <button onclick="logout()">خروج</button>
+</header>
+
+<main>
+  <h2>خوش آمدید، <span id="user"></span>!</h2>
+  <h2>سبد خرید شما:</h2>
+  <div id="cart-items"></div>
+</main>
+
+<script>
+  // بررسی ورود
+  const loggedUser = localStorage.getItem('loggedUser');
+  if(!loggedUser) window.location.href = 'login.html';
+  document.getElementById('user').textContent = loggedUser;
+
+  // بارگذاری سبد خرید
+  const cartItems = JSON.parse(localStorage.getItem('wixdora_cart')) || [];
+  const cartContainer = document.getElementById('cart-items');
+
+  if(cartItems.length===0){
+    cartContainer.innerHTML = "<p>سبد خرید شما خالی است.</p>";
+  } else {
+    cartItems.forEach(item => {
+      cartContainer.innerHTML += `
+        <div class="cart-item">
+          <div>${item.name} (${item.quantity})</div>
+          <div>${item.price.toLocaleString()} افغانی</div>
+        </div>`;
+    });
+  }
+
+  function logout(){
+    localStorage.removeItem('loggedUser');
+    window.location.href = 'login.html';
+  }
+</script>
+
+</body>
+</html>

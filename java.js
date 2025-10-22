@@ -1,4 +1,4 @@
-// مدیریت حالت تاریک/روشن
+// ---------- مدیریت حالت تاریک/روشن ----------
 class ThemeManager {
     constructor() {
         this.theme = localStorage.getItem('theme') || 'light';
@@ -32,12 +32,14 @@ class ThemeManager {
         const toggleBtn = document.getElementById('dark-mode-toggle');
         if (toggleBtn) {
             const icon = toggleBtn.querySelector('i');
-            icon.className = this.theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            if(icon) {
+                icon.className = this.theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            }
         }
     }
 }
 
-// مدیریت سبد خرید
+// ---------- مدیریت سبد خرید ----------
 class CartManager {
     constructor() {
         this.cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -80,7 +82,6 @@ class CartManager {
     }
 
     showAddToCartAnimation() {
-        // نمایش انیمیشن اضافه شدن به سبد خرید
         const animation = document.createElement('div');
         animation.className = 'add-to-cart-animation';
         animation.textContent = '✓ اضافه شد';
@@ -96,28 +97,32 @@ class CartManager {
         `;
         
         document.body.appendChild(animation);
-        
         setTimeout(() => {
             document.body.removeChild(animation);
         }, 2000);
     }
 }
 
-// مقداردهی اولیه
+// ---------- تابع کمکی برای گرفتن سبد خرید ----------
+function getCartFromStorage() {
+    return JSON.parse(localStorage.getItem('cart')) || [];
+}
+
+// ---------- مقداردهی اولیه ----------
 document.addEventListener('DOMContentLoaded', function() {
-    // مقداردهی مدیریت تم
+    // تم
     const themeManager = new ThemeManager();
     
-    // مقداردهی مدیریت سبد خرید
+    // سبد خرید
     window.cartManager = new CartManager();
     
-    // نمایش محصولات ویژه در صفحه اصلی
+    // نمایش محصولات ویژه
     if (document.getElementById('featured-products')) {
         loadFeaturedProducts();
     }
 });
 
-// بارگذاری محصولات ویژه
+// ---------- بارگذاری محصولات ویژه ----------
 async function loadFeaturedProducts() {
     try {
         const productsContainer = document.getElementById('featured-products');
@@ -130,46 +135,29 @@ async function loadFeaturedProducts() {
             </div>
         `;
         
-        // در اینجا محصولات از API گرفته می‌شوند
-        // فعلاً از داده‌های نمونه استفاده می‌کنیم
+        // محصولات نمونه
         const featuredProducts = [
-            {
-                id: 1,
-                title: "لپ‌تاپ گیمینگ",
-                price: 15000000,
-                image: "https://via.placeholder.com/300x200",
-                category: "الکترونیک"
-            },
-            {
-                id: 2,
-                title: "هدفون بی‌سیم",
-                price: 800000,
-                image: "https://via.placeholder.com/300x200",
-                category: "الکترونیک"
-            },
-            {
-                id: 3,
-                title: "ماوس گیمینگ",
-                price: 400000,
-                image: "https://via.placeholder.com/300x200",
-                category: "الکترونیک"
-            }
+            { id: 1, title: "لپ‌تاپ گیمینگ", price: 15000000, image: "https://via.placeholder.com/300x200", category: "الکترونیک" },
+            { id: 2, title: "هدفون بی‌سیم", price: 800000, image: "https://via.placeholder.com/300x200", category: "الکترونیک" },
+            { id: 3, title: "ماوس گیمینگ", price: 400000, image: "https://via.placeholder.com/300x200", category: "الکترونیک" }
         ];
         
-        // نمایش محصولات
         displayProducts(featuredProducts, productsContainer);
         
     } catch (error) {
         console.error('خطا در بارگذاری محصولات:', error);
-        document.getElementById('featured-products').innerHTML = `
-            <div class="col-12 text-center text-danger">
-                <p>خطا در بارگذاری محصولات. لطفاً دوباره تلاش کنید.</p>
-            </div>
-        `;
+        const container = document.getElementById('featured-products');
+        if(container) {
+            container.innerHTML = `
+                <div class="col-12 text-center text-danger">
+                    <p>خطا در بارگذاری محصولات. لطفاً دوباره تلاش کنید.</p>
+                </div>
+            `;
+        }
     }
 }
 
-// نمایش محصولات در صفحه
+// ---------- نمایش محصولات ----------
 function displayProducts(products, container) {
     container.innerHTML = products.map(product => `
         <div class="col-md-4 col-lg-3 fade-in-up">
@@ -181,8 +169,7 @@ function displayProducts(products, container) {
                     <div class="mt-auto">
                         <p class="card-text fw-bold text-primary">${product.price.toLocaleString()} تومان</p>
                         <button class="btn btn-primary w-100 add-to-cart" data-product='${JSON.stringify(product)}'>
-                            <i class="fas fa-cart-plus"></i>
-                            افزودن به سبد
+                            <i class="fas fa-cart-plus"></i> افزودن به سبد
                         </button>
                     </div>
                 </div>
@@ -190,7 +177,7 @@ function displayProducts(products, container) {
         </div>
     `).join('');
     
-    // اضافه کردن event listener به دکمه‌های سبد خرید
+    // دکمه‌های افزودن به سبد
     container.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', function() {
             const product = JSON.parse(this.dataset.product);
@@ -198,10 +185,17 @@ function displayProducts(products, container) {
         });
     });
 }
-// جمع کل قیمت
+
+// ---------- جمع کل قیمت ----------
 function updateCartTotal() {
     const cart = getCartFromStorage();
     let totalPrice = 0;
     cart.forEach(item => totalPrice += item.price * item.quantity);
-    console.log('جمع کل:', totalPrice.toLocaleString(), 'تومان'); // برای تست
+    console.log('جمع کل:', totalPrice.toLocaleString(), 'تومان');
+}
+
+// ---------- تابع toggleMenu برای منو ----------
+function toggleMenu() {
+    const menu = document.getElementById('main-menu');
+    if(menu) menu.classList.toggle('active');
 }

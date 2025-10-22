@@ -7,9 +7,7 @@
 <style>
 :root {
     --primary: #007bff;
-    --success: #28a745;
     --danger: #dc3545;
-    --dark: #343a40;
     --light: #f8f9fa;
 }
 * { box-sizing: border-box; margin:0; padding:0; }
@@ -30,15 +28,10 @@ body { font-family: Tahoma, Arial, sans-serif; background-color: var(--light); c
 .product-card { background:white; border-radius:10px; padding:1rem; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:center; transition: transform 0.3s ease; }
 .product-card:hover { transform: translateY(-5px); }
 .product-name { font-size:1.2rem; font-weight:bold; margin:0.5rem 0; }
-.product-category { color:#666; font-size:0.9rem; margin-bottom:0.5rem; }
 .product-price { color:var(--primary); font-size:1.3rem; font-weight:bold; margin:1rem 0; }
 .product-description { color:#777; font-size:0.85rem; margin-bottom:1rem; height:60px; overflow:hidden; }
 
 .alert { position: fixed; top:100px; right:20px; padding:1rem 1.5rem; border-radius:5px; z-index:9999; background:#d4edda; color:#155724; border:1px solid #c3e6cb; display:none; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-.filters { background:white; padding:1.5rem; border-radius:10px; margin:2rem 0; box-shadow:0 2px 10px rgba(0,0,0,0.1);}
-.filter-buttons { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1rem;}
-.filter-btn { padding:0.5rem 1rem; border:2px solid var(--primary); background:transparent; color:var(--primary); border-radius:5px; cursor:pointer; transition:all 0.3s; }
-.filter-btn.active { background:var(--primary); color:white; }
 
 </style>
 </head>
@@ -59,93 +52,80 @@ body { font-family: Tahoma, Arial, sans-serif; background-color: var(--light); c
 
 <div class="container">
 <h1 style="text-align:center; margin:2rem 0;">محصولات الکترونیک</h1>
-
-<div class="filters">
-<h3>دسته‌بندی محصولات</h3>
-<div class="filter-buttons">
-<button class="filter-btn active" onclick="filterProducts('الکترونیک')">الکترونیک</button>
-</div>
-</div>
-
 <div class="products-grid" id="products-container"></div>
 </div>
 
 <script>
+// آرایه محصولات با لینک‌های آنلاین از Pexels
 const allProducts = [
-{ id:1, name:"لپ‌تاپ گیمینگ ایسوس", price:45000, category:"الکترونیک", description:"لپ‌تاپ گیمینگ با پردازنده Core i7 و کارت گرافیک RTX 3060", img:"https://i.imgur.com/xJ0tNlw.jpg" },
-{ id:2, name:"هدفون بی‌سیم سونی WH-1000XM4", price:8500, category:"الکترونیک", description:"هدفون بی‌سیم با نویزکنسلینگ عالی و باتری طولانی", img:"https://i.imgur.com/4tHjKZy.jpg" },
-{ id:3, name:"گوشی هوشمند سامسونگ Galaxy S23", price:12000, category:"الکترونیک", description:"گوشی هوشمند با دوربین عالی و پردازنده قوی", img:"https://i.imgur.com/udE9F4G.jpg" },
-{ id:4, name:"ساعت هوشمند اپل واچ سری 9", price:12000, category:"الکترونیک", description:"ساعت هوشمند با قابلیت اندازه گیری ضربان قلب و GPS", img:"https://i.imgur.com/pfQmzXI.jpg" },
-{ id:5, name:"دوربین دیجیتال کانن EOS R6", price:90000, category:"الکترونیک", description:"دوربین حرفه‌ای با سنسور فول فریم و فیلمبرداری 4K", img:"https://i.imgur.com/0uX1fQ2.jpg" }
+{ id:1, name:"لپ‌تاپ گیمینگ ایسوس", price:45000, description:"لپ‌تاپ گیمینگ با پردازنده Core i7 و کارت گرافیک RTX 3060", img:"https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800" },
+{ id:2, name:"هدفون بی‌سیم سونی WH-1000XM4", price:8500, description:"هدفون بی‌سیم با نویزکنسلینگ عالی و باتری طولانی", img:"https://images.pexels.com/photos/3394668/pexels-photo-3394668.jpeg?auto=compress&cs=tinysrgb&w=800" },
+{ id:3, name:"گوشی هوشمند سامسونگ Galaxy S23", price:12000, description:"گوشی هوشمند با دوربین عالی و پردازنده قوی", img:"https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=800" },
+{ id:4, name:"ساعت هوشمند اپل واچ سری 9", price:12000, description:"ساعت هوشمند با قابلیت اندازه‌گیری ضربان قلب و GPS", img:"https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=800" },
+{ id:5, name:"دوربین دیجیتال کانن EOS R6", price:90000, description:"دوربین حرفه‌ای با سنسور فول فریم و فیلمبرداری 4K", img:"https://images.pexels.com/photos/205926/pexels-photo-205926.jpeg?auto=compress&cs=tinysrgb&w=800" }
 ];
 
-let filteredProducts = [...allProducts];
-
-window.addEventListener('load', function(){
-displayProducts(allProducts);
-updateCartCount();
-});
-
-function filterProducts(category){
-document.querySelectorAll('.filter-btn').forEach(btn=>btn.classList.remove('active'));
-event.target.classList.add('active');
-filteredProducts = allProducts.filter(p=>p.category===category);
-displayProducts(filteredProducts);
-}
-
-function displayProducts(products){
-const container = document.getElementById('products-container');
-let html = '';
-for(let i=0;i<products.length;i++){
-const product=products[i];
-html+=`
-<div class="product-card">
-<img src="${product.img}" alt="${product.name}" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:1rem;">
-<div class="product-name">${product.name}</div>
-<div class="product-category">${product.category}</div>
-<div class="product-description">${product.description}</div>
-<div class="product-price">${product.price.toLocaleString()} افغانی</div>
-<button class="btn" onclick="addToCart(${product.id})">افزودن به سبد خرید</button>
-</div>`;
-}
-container.innerHTML=html;
-}
-
-function addToCart(productId){
-let cart=getCartFromStorage();
-const product=allProducts.find(p=>p.id===productId);
-if(!product){ showAlert('محصول یافت نشد!'); return; }
-let existing=cart.find(item=>item.id===productId);
-if(existing){ existing.quantity+=1; } else { cart.push({id:product.id,name:product.name,price:product.price,img:product.img,quantity:1}); }
-saveCartToStorage(cart);
-updateCartCount();
-showAlert('✅ '+product.name+' به سبد خرید اضافه شد!');
-}
-
 function getCartFromStorage(){
-try{
-const cartData=localStorage.getItem('wixdora_cart');
-if(cartData){ return JSON.parse(cartData); }
-}catch(e){ console.log('خطا در خواندن سبد خرید'); }
-return [];
+    let cart = localStorage.getItem('wixdora_cart');
+    return cart ? JSON.parse(cart) : [];
 }
 
-function saveCartToStorage(cart){ try{ localStorage.setItem('wixdora_cart',JSON.stringify(cart)); }catch(e){console.log('خطا در ذخیره سبد خرید');} }
+function saveCartToStorage(cart){ 
+    try{ 
+        localStorage.setItem('wixdora_cart',JSON.stringify(cart)); 
+    } catch(e){ 
+        console.log('خطا در ذخیره سبد خرید'); 
+    } 
+}
 
 function updateCartCount(){
-const cart=getCartFromStorage();
-let totalItems=0;
-for(let i=0;i<cart.length;i++){ totalItems+=cart[i].quantity; }
-const cartCount=document.getElementById('cart-count');
-if(cartCount){ cartCount.textContent=totalItems; }
+    const cart = getCartFromStorage();
+    let totalItems = 0;
+    for(let i=0; i<cart.length; i++){ totalItems += cart[i].quantity; }
+    const cartCount = document.getElementById('cart-count');
+    if(cartCount){ cartCount.textContent = totalItems; }
 }
 
 function showAlert(message){
-const alert=document.getElementById('alert');
-alert.textContent=message;
-alert.style.display='block';
-setTimeout(()=>{alert.style.display='none';},3000);
+    const alert = document.getElementById('alert');
+    alert.textContent = message;
+    alert.style.display = 'block';
+    setTimeout(()=>{ alert.style.display='none'; }, 3000);
 }
+
+function displayProducts(products){
+    const container = document.getElementById('products-container');
+    let html = '';
+    for(let i=0; i<products.length; i++){
+        const product = products[i];
+        html += `
+        <div class="product-card">
+            <img src="${product.img}" alt="${product.name}" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:1rem;">
+            <div class="product-name">${product.name}</div>
+            <div class="product-description">${product.description}</div>
+            <div class="product-price">${product.price.toLocaleString()} افغانی</div>
+            <button class="btn" onclick="addToCart(${product.id})">افزودن به سبد خرید</button>
+        </div>`;
+    }
+    container.innerHTML = html;
+}
+
+function addToCart(productId){
+    let cart = getCartFromStorage();
+    const product = allProducts.find(p => p.id === productId);
+    if(!product){ showAlert('محصول یافت نشد!'); return; }
+    let existing = cart.find(item => item.id === productId);
+    if(existing){ existing.quantity += 1; }
+    else { cart.push({id:product.id, name:product.name, price:product.price, img:product.img, quantity:1}); }
+    saveCartToStorage(cart);
+    updateCartCount();
+    showAlert('✅ ' + product.name + ' به سبد خرید اضافه شد!');
+}
+
+window.addEventListener('load', function(){
+    displayProducts(allProducts);
+    updateCartCount();
+});
 </script>
 </body>
 </html>
